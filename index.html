@@ -822,7 +822,24 @@
             document.getElementById('minutes').textContent = String(Math.floor((diff%(1000*60*60))/(1000*60))).padStart(2,'0');
             document.getElementById('seconds').textContent = String(Math.floor((diff%(1000*60))/1000)).padStart(2,'0');
         }
+<<<<<<< HEAD
         updateCountdown(); setInterval(updateCountdown, 1000);
+=======
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+
+        // ============================================
+        // RSVP FORM
+        // ============================================
+        /*
+            ====================================================================
+            GOOGLE APPS SCRIPT WEB APP СІЛТЕМЕСІ:
+            Төмендегі URL-ге өзіңіздің Web App сілтемеңізді қойыңыз.
+            Мысалы: 'https://script.google.com/macros/s/AKfycb.../exec'
+            ====================================================================
+        */
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwP2gHikyU1Cdt34bN6elgTRTYtSJa_uAA80AXZ911A-RbtYl_Tg7xGpv3hZtxU6erz/exec';
+>>>>>>> b0711ba7572856f94d89cdf25952a691f923ae5c
 
         // ==================== RSVP ====================
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwP2gHikyU1Cdt34bN6elgTRTYtSJa_uAA80AXZ911A-RbtYl_Tg7xGpv3hZtxU6erz/exec';
