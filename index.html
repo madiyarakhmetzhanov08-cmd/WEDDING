@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Зарина & Диасхан — Үйлену тойына шақыру</title>
+    <title>Диасхан & Зарина — Үйлену тойына шақыру</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Montserrat:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet">
     <style>
@@ -26,7 +26,6 @@
         }
 
         html { scroll-behavior: smooth; overflow-x: hidden; }
-
         body {
             font-family: 'Montserrat', sans-serif;
             background-color: var(--ivory);
@@ -35,48 +34,79 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* ============================================
-           PRELOADER
-           ============================================ */
-        .preloader {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
+        /* ==================== WELCOME SPLASH (enables audio) ==================== */
+        .welcome-splash {
+            position: fixed; inset: 0; z-index: 99999;
             background: var(--ivory);
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            transition: opacity 1s ease, visibility 1s ease;
+            cursor: pointer;
+        }
+        .welcome-splash.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+        .welcome-splash-inner { text-align: center; animation: splashPulse 3s ease-in-out infinite; }
+        .welcome-splash-orn { margin-bottom: 25px; }
+        .welcome-splash-orn svg { width: 80px; height: 80px; }
+        .welcome-splash-names {
+            font-family: 'Cormorant Garamond', serif; font-weight: 300;
+            font-size: clamp(30px, 8vw, 50px); letter-spacing: 5px;
+            color: var(--text-dark); text-transform: uppercase; margin-bottom: 6px;
+        }
+        .welcome-splash-names .amp {
+            font-family: 'Great Vibes', cursive; color: var(--gold);
+            font-size: clamp(28px, 7vw, 44px); letter-spacing: 0; text-transform: none;
+        }
+        .welcome-splash-date {
+            font-family: 'Montserrat', sans-serif; font-weight: 300;
+            font-size: 15px; letter-spacing: 6px; color: var(--gold); margin-bottom: 40px;
+        }
+        .welcome-splash-btn {
+            display: inline-flex; align-items: center; gap: 10px;
+            padding: 16px 40px; border: 1.5px solid var(--gold); border-radius: 60px;
+            background: transparent; color: var(--gold-dark);
+            font-family: 'Montserrat', sans-serif; font-weight: 500;
+            font-size: 13px; letter-spacing: 4px; text-transform: uppercase;
+            cursor: pointer; transition: all 0.4s ease;
+            animation: btnGlow 2s ease-in-out infinite;
+        }
+        .welcome-splash-btn:hover {
+            background: var(--gold); color: var(--white);
+            box-shadow: 0 6px 30px rgba(201,169,110,0.4);
+        }
+        .welcome-splash-btn svg {
+            width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2;
+        }
+        @keyframes splashPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.01); }
+        }
+        @keyframes btnGlow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(201,169,110,0); }
+            50% { box-shadow: 0 0 25px 5px rgba(201,169,110,0.2); }
+        }
+
+        /* ==================== PRELOADER ==================== */
+        .preloader {
+            position: fixed; inset: 0; background: var(--ivory); z-index: 9999;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
             transition: opacity 0.8s ease, visibility 0.8s ease;
         }
-        .preloader.hidden {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-        }
+        .preloader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
         .preloader-ring {
-            width: 60px; height: 60px;
-            border: 2px solid var(--cream);
-            border-top: 2px solid var(--gold);
-            border-radius: 50%;
+            width: 60px; height: 60px; border: 2px solid var(--cream);
+            border-top: 2px solid var(--gold); border-radius: 50%;
             animation: spin 1s linear infinite;
         }
         .preloader-text {
-            margin-top: 20px;
-            font-family: 'Great Vibes', cursive;
-            font-size: 24px;
-            color: var(--gold);
+            margin-top: 20px; font-family: 'Great Vibes', cursive;
+            font-size: 26px; color: var(--gold);
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* ============================================
-           GLOBAL ANIMATIONS
-           ============================================ */
+        /* ==================== ANIMATIONS ==================== */
         .fade-in {
-            opacity: 0;
-            transform: translateY(50px);
-            transition: opacity 1.2s cubic-bezier(0.22, 1, 0.36, 1),
-                        transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+            opacity: 0; transform: translateY(50px);
+            transition: opacity 1.2s cubic-bezier(0.22,1,0.36,1), transform 1.2s cubic-bezier(0.22,1,0.36,1);
         }
         .fade-in.visible { opacity: 1; transform: translateY(0); }
         .fade-in-delay-1 { transition-delay: 0.15s; }
@@ -85,174 +115,80 @@
         .fade-in-delay-4 { transition-delay: 0.7s; }
         .fade-in-delay-5 { transition-delay: 0.9s; }
 
-        .fade-scale {
-            opacity: 0;
-            transform: scale(0.85);
-            transition: opacity 1.4s ease, transform 1.4s cubic-bezier(0.22, 1, 0.36, 1);
-        }
+        .fade-scale { opacity: 0; transform: scale(0.85); transition: opacity 1.4s ease, transform 1.4s cubic-bezier(0.22,1,0.36,1); }
         .fade-scale.visible { opacity: 1; transform: scale(1); }
 
-        .fade-left {
-            opacity: 0; transform: translateX(-60px);
-            transition: opacity 1s ease, transform 1s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-        .fade-left.visible { opacity: 1; transform: translateX(0); }
-
-        .fade-right {
-            opacity: 0; transform: translateX(60px);
-            transition: opacity 1s ease, transform 1s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-        .fade-right.visible { opacity: 1; transform: translateX(0); }
-
-        /* ============================================
-           SECTION BASE
-           ============================================ */
+        /* ==================== SECTION ==================== */
         .section {
-            min-height: 100vh;
-            min-height: 100dvh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 60px 24px;
-            position: relative;
-            overflow: hidden;
+            min-height: 100vh; min-height: 100dvh;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 60px 24px; position: relative; overflow: hidden;
         }
-
         .section > * { position: relative; z-index: 2; }
 
-        /* ============================================
-           ANIMATED KAZAKH ORNAMENT BORDERS
-           ============================================ */
-        .orn-border-wrap {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            pointer-events: none; z-index: 1;
-        }
-        .orn-line {
-            position: absolute;
-            background: linear-gradient(90deg, transparent, var(--gold), transparent);
-            opacity: 0.2;
-        }
+        /* ==================== ORNAMENT BORDERS ==================== */
+        .orn-border-wrap { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
+        .orn-line { position: absolute; background: linear-gradient(90deg, transparent, var(--gold), transparent); opacity: 0.2; }
         .orn-line.top { top: 12px; left: 30px; right: 30px; height: 1px; }
         .orn-line.bottom { bottom: 12px; left: 30px; right: 30px; height: 1px; }
         .orn-line.left { left: 12px; top: 30px; bottom: 30px; width: 1px; background: linear-gradient(180deg, transparent, var(--gold), transparent); }
         .orn-line.right { right: 12px; top: 30px; bottom: 30px; width: 1px; background: linear-gradient(180deg, transparent, var(--gold), transparent); }
 
-        /* Animated corner ornaments */
-        .orn-corner {
-            position: absolute;
-            width: 90px; height: 90px;
-            opacity: 0.35;
-        }
+        .orn-corner { position: absolute; width: 90px; height: 90px; opacity: 0.35; }
         .orn-corner svg { width: 100%; height: 100%; }
         .orn-corner.tl { top: 8px; left: 8px; }
         .orn-corner.tr { top: 8px; right: 8px; transform: scaleX(-1); }
         .orn-corner.bl { bottom: 8px; left: 8px; transform: scaleY(-1); }
         .orn-corner.br { bottom: 8px; right: 8px; transform: scale(-1,-1); }
-
-        .orn-corner svg path {
-            stroke-dasharray: 300;
-            stroke-dashoffset: 300;
-            animation: drawOrn 3s ease forwards;
-        }
+        .orn-corner svg path { stroke-dasharray: 300; stroke-dashoffset: 300; animation: drawOrn 3s ease forwards; }
         .orn-corner.tr svg path { animation-delay: 0.3s; }
         .orn-corner.bl svg path { animation-delay: 0.6s; }
         .orn-corner.br svg path { animation-delay: 0.9s; }
+        @keyframes drawOrn { to { stroke-dashoffset: 0; } }
+        @media(max-width:480px) { .orn-corner { width: 55px; height: 55px; } }
 
-        @keyframes drawOrn {
-            to { stroke-dashoffset: 0; }
-        }
-
-        @media(max-width:480px) {
-            .orn-corner { width: 55px; height: 55px; }
-        }
-
-        /* ============================================
-           LARGE ORNAMENT MANDALA (animated, decorative)
-           ============================================ */
+        /* ==================== MANDALA ==================== */
         .mandala-ornament {
-            position: absolute;
-            width: 500px; height: 500px;
-            opacity: 0.04;
-            pointer-events: none;
-            animation: rotateSlow 120s linear infinite;
+            position: absolute; width: 500px; height: 500px;
+            opacity: 0.04; pointer-events: none; animation: rotateSlow 120s linear infinite;
         }
         .mandala-ornament.left { left: -200px; top: 50%; transform: translateY(-50%); }
         .mandala-ornament.right { right: -200px; top: 50%; transform: translateY(-50%); animation-direction: reverse; }
-
         @keyframes rotateSlow { to { transform: translateY(-50%) rotate(360deg); } }
+        @media(max-width:768px) { .mandala-ornament { width: 300px; height: 300px; } .mandala-ornament.left { left: -120px; } .mandala-ornament.right { right: -120px; } }
 
-        @media(max-width:768px) {
-            .mandala-ornament { width: 300px; height: 300px; }
-            .mandala-ornament.left { left: -120px; }
-            .mandala-ornament.right { right: -120px; }
-        }
-
-        /* ============================================
-           FLOATING ELEMENTS
-           ============================================ */
-        .particles-container {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 0; overflow: hidden;
-        }
-        .particle {
-            position: absolute;
-            border-radius: 50%;
-            opacity: 0;
-            animation: floatUp 10s ease-in-out infinite;
-        }
+        /* ==================== PARTICLES ==================== */
+        .particles-container { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+        .particle { position: absolute; border-radius: 50%; opacity: 0; animation: floatUp 10s ease-in-out infinite; }
         .particle.gold { background: radial-gradient(circle, var(--gold-shine), transparent 70%); }
-        .particle.sparkle {
-            background: radial-gradient(circle, rgba(255,255,255,0.9), transparent 60%);
-            box-shadow: 0 0 6px 2px var(--gold-glow);
-        }
-
+        .particle.sparkle { background: radial-gradient(circle, rgba(255,255,255,0.9), transparent 60%); box-shadow: 0 0 6px 2px var(--gold-glow); }
         @keyframes floatUp {
             0% { opacity: 0; transform: translateY(100vh) rotate(0deg) scale(0.3); }
-            15% { opacity: 0.6; }
-            85% { opacity: 0.3; }
+            15% { opacity: 0.6; } 85% { opacity: 0.3; }
             100% { opacity: 0; transform: translateY(-15vh) rotate(180deg) scale(0.8); }
         }
-
-        /* Rose petals */
-        .petal {
-            position: absolute;
-            width: 12px; height: 12px;
-            opacity: 0;
-            pointer-events: none;
-            animation: petalFall 12s ease-in-out infinite;
-        }
+        .petal { position: absolute; width: 12px; height: 12px; opacity: 0; pointer-events: none; animation: petalFall 12s ease-in-out infinite; }
         .petal svg { width: 100%; height: 100%; }
         @keyframes petalFall {
             0% { opacity: 0; transform: translateY(-10vh) rotate(0deg) translateX(0); }
-            10% { opacity: 0.5; }
-            50% { transform: translateY(50vh) rotate(180deg) translateX(40px); }
-            90% { opacity: 0.3; }
-            100% { opacity: 0; transform: translateY(110vh) rotate(360deg) translateX(-30px); }
+            10% { opacity: 0.5; } 50% { transform: translateY(50vh) rotate(180deg) translateX(40px); }
+            90% { opacity: 0.3; } 100% { opacity: 0; transform: translateY(110vh) rotate(360deg) translateX(-30px); }
         }
 
-        /* ============================================
-           MUSIC TOGGLE
-           ============================================ */
+        /* ==================== MUSIC TOGGLE ==================== */
         .music-toggle {
             position: fixed; top: 20px; right: 20px; z-index: 1000;
             width: 48px; height: 48px; border-radius: 50%;
             border: 1px solid var(--gold-light);
-            background: rgba(250, 247, 242, 0.92);
+            background: rgba(250,247,242,0.92);
             backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
             cursor: pointer; display: flex; align-items: center; justify-content: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 20px rgba(201, 169, 110, 0.2);
+            transition: all 0.3s ease; box-shadow: 0 4px 20px rgba(201,169,110,0.2);
         }
         .music-toggle:hover { background: var(--gold); border-color: var(--gold); transform: scale(1.08); }
         .music-toggle:hover .music-bars span { background: var(--white); }
         .music-bars { display: flex; align-items: flex-end; gap: 2.5px; height: 18px; }
-        .music-bars span {
-            display: block; width: 3px; background: var(--gold);
-            border-radius: 2px; transition: background 0.3s ease;
-        }
+        .music-bars span { display: block; width: 3px; background: var(--gold); border-radius: 2px; transition: background 0.3s ease; }
         .music-bars.playing span { animation: musicBar 0.7s ease-in-out infinite alternate; }
         .music-bars span:nth-child(1) { height: 5px; animation-delay: 0s; }
         .music-bars span:nth-child(2) { height: 12px; animation-delay: 0.12s; }
@@ -261,589 +197,271 @@
         .music-bars span:nth-child(5) { height: 9px; animation-delay: 0.48s; }
         @keyframes musicBar { 0% { height: 4px; } 100% { height: 18px; } }
 
-        /* ============================================
-           HERO SECTION
-           ============================================ */
-        .hero {
-            background: linear-gradient(180deg, #EDE6DA 0%, var(--ivory) 40%, var(--blush) 100%);
-            text-align: center;
-        }
+        /* ==================== HERO ==================== */
+        .hero { background: linear-gradient(180deg, #EDE6DA 0%, var(--ivory) 40%, var(--blush) 100%); text-align: center; }
         .hero::before {
-            content: '';
-            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background:
-                radial-gradient(ellipse at 15% 15%, rgba(201,169,110,0.08) 0%, transparent 50%),
-                radial-gradient(ellipse at 85% 85%, rgba(201,169,110,0.08) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 50%, rgba(201,169,110,0.03) 0%, transparent 70%);
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(ellipse at 15% 15%, rgba(201,169,110,0.08) 0%, transparent 50%),
+                        radial-gradient(ellipse at 85% 85%, rgba(201,169,110,0.08) 0%, transparent 50%),
+                        radial-gradient(ellipse at 50% 50%, rgba(201,169,110,0.03) 0%, transparent 70%);
             pointer-events: none; z-index: 0;
         }
 
-        /* Hero photo gallery */
         .hero-photo-left, .hero-photo-right {
-            position: absolute;
-            width: 180px; height: 260px;
-            border-radius: 120px 120px 20px 20px;
-            overflow: hidden;
-            opacity: 0.18;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            position: absolute; width: 180px; height: 260px;
+            border-radius: 120px 120px 20px 20px; overflow: hidden;
+            opacity: 0.18; box-shadow: 0 10px 40px rgba(0,0,0,0.08);
         }
-        .hero-photo-left {
-            left: -40px; top: 50%; transform: translateY(-50%) rotate(-8deg);
-        }
-        .hero-photo-right {
-            right: -40px; top: 50%; transform: translateY(-50%) rotate(8deg);
-        }
-        .hero-photo-left img, .hero-photo-right img {
-            width: 100%; height: 100%; object-fit: cover;
-            filter: sepia(30%) brightness(1.1);
-        }
-
-        @media(min-width:768px) {
-            .hero-photo-left, .hero-photo-right { width: 220px; height: 320px; opacity: 0.15; }
-            .hero-photo-left { left: 20px; }
-            .hero-photo-right { right: 20px; }
-        }
-        @media(max-width:480px) {
-            .hero-photo-left, .hero-photo-right { width: 100px; height: 160px; }
-        }
+        .hero-photo-left { left: -40px; top: 50%; transform: translateY(-50%) rotate(-8deg); }
+        .hero-photo-right { right: -40px; top: 50%; transform: translateY(-50%) rotate(8deg); }
+        .hero-photo-left img, .hero-photo-right img { width: 100%; height: 100%; object-fit: cover; filter: sepia(30%) brightness(1.1); }
+        @media(min-width:768px) { .hero-photo-left, .hero-photo-right { width: 220px; height: 320px; opacity: 0.15; } .hero-photo-left { left: 20px; } .hero-photo-right { right: 20px; } }
+        @media(max-width:480px) { .hero-photo-left, .hero-photo-right { width: 100px; height: 160px; } }
 
         .hero-date-top {
-            font-family: 'Montserrat', sans-serif; font-weight: 300;
-            font-size: 12px; letter-spacing: 8px; color: var(--gold);
+            font-family: 'Montserrat', sans-serif; font-weight: 400;
+            font-size: 16px; letter-spacing: 8px; color: var(--gold);
             text-transform: uppercase; margin-bottom: 20px;
         }
-
-        .hero-ornament-ring {
-            width: 120px; height: 120px; margin: 0 auto 15px;
-            position: relative;
-        }
-        .hero-ornament-ring svg {
-            width: 100%; height: 100%;
-            animation: pulseGlow 4s ease-in-out infinite;
-        }
+        .hero-ornament-ring { width: 120px; height: 120px; margin: 0 auto 15px; position: relative; }
+        .hero-ornament-ring svg { width: 100%; height: 100%; animation: pulseGlow 4s ease-in-out infinite; }
         @keyframes pulseGlow {
             0%, 100% { filter: drop-shadow(0 0 5px rgba(201,169,110,0.2)); }
-            50% { filter: drop-shadow(0 0 15px rgba(201,169,110,0.4)); }
+            50% { filter: drop-shadow(0 0 20px rgba(201,169,110,0.5)); }
         }
 
         .hero-names {
             font-family: 'Cormorant Garamond', serif; font-weight: 300;
             font-size: clamp(40px, 11vw, 78px); letter-spacing: 8px;
             color: var(--text-dark); line-height: 1.15; text-transform: uppercase;
-            position: relative;
             text-shadow: 0 2px 30px rgba(201,169,110,0.15);
         }
         .hero-names .ampersand {
-            display: block;
-            font-family: 'Great Vibes', cursive;
-            font-size: clamp(40px, 9vw, 65px);
-            color: var(--gold); letter-spacing: 0; text-transform: none;
-            margin: 2px 0; font-weight: 400;
+            display: block; font-family: 'Great Vibes', cursive;
+            font-size: clamp(40px, 9vw, 65px); color: var(--gold);
+            letter-spacing: 0; text-transform: none; margin: 2px 0; font-weight: 400;
             animation: ampersandFloat 5s ease-in-out infinite;
         }
-        @keyframes ampersandFloat {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
+        @keyframes ampersandFloat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.06); } }
 
         .hero-subtitle {
-            font-family: 'Montserrat', sans-serif; font-weight: 300;
-            font-size: 10px; letter-spacing: 10px; color: var(--text-light);
-            text-transform: uppercase; margin-top: 20px;
+            font-family: 'Montserrat', sans-serif; font-weight: 400;
+            font-size: 13px; letter-spacing: 8px; color: var(--text-medium);
+            text-transform: uppercase; margin-top: 22px;
         }
+        .hero-line-orn { width: 260px; height: 2px; margin: 22px auto 0; position: relative; overflow: visible; }
+        .hero-line-orn::before { content: ''; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+        .hero-line-orn::after { content: '◆'; position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); font-size: 8px; color: var(--gold); background: var(--ivory); padding: 0 12px; }
 
-        .hero-line-orn {
-            width: 250px; height: 2px; margin: 20px auto 0; position: relative;
-            overflow: visible;
+        /* Scroll arrow */
+        .scroll-arrow {
+            position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%);
+            display: flex; flex-direction: column; align-items: center; gap: 8px;
+            animation: scrollBounce 2.5s ease-in-out infinite;
         }
-        .hero-line-orn::before {
-            content: ''; position: absolute; left: 0; right: 0; top: 50%;
-            height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        .scroll-arrow-label {
+            font-family: 'Montserrat', sans-serif; font-weight: 400;
+            font-size: 10px; letter-spacing: 5px; text-transform: uppercase;
+            color: var(--gold); opacity: 0.7;
         }
-        .hero-line-orn::after {
-            content: '◆'; position: absolute; left: 50%; top: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 8px; color: var(--gold);
-            background: var(--ivory); padding: 0 12px;
-        }
+        .scroll-arrow svg { width: 28px; height: 28px; stroke: var(--gold); fill: none; stroke-width: 1.5; opacity: 0.6; }
+        .scroll-arrow .arrow-2 { margin-top: -14px; opacity: 0.3; }
+        @keyframes scrollBounce { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(10px); } }
 
-        .scroll-indicator {
-            position: absolute; bottom: 25px; left: 50%;
-            transform: translateX(-50%);
-            display: flex; flex-direction: column; align-items: center; gap: 6px;
-        }
-        .scroll-indicator span {
-            font-size: 8px; letter-spacing: 4px; text-transform: uppercase;
-            color: var(--text-light); opacity: 0.5;
-        }
-        .scroll-mouse {
-            width: 22px; height: 34px; border: 1.5px solid var(--gold-light);
-            border-radius: 11px; position: relative; opacity: 0.5;
-        }
-        .scroll-mouse::before {
-            content: ''; position: absolute;
-            top: 6px; left: 50%; transform: translateX(-50%);
-            width: 3px; height: 7px; background: var(--gold);
-            border-radius: 2px; animation: scrollWheel 2s ease-in-out infinite;
-        }
-        @keyframes scrollWheel {
-            0% { transform: translateX(-50%) translateY(0); opacity: 1; }
-            100% { transform: translateX(-50%) translateY(12px); opacity: 0; }
-        }
-
-        /* ============================================
-           PHOTO DIVIDER SECTIONS
-           ============================================ */
-        .photo-divider {
-            width: 100%; height: 35vh; min-height: 200px;
-            position: relative; overflow: hidden;
-        }
-        .photo-divider img {
-            width: 100%; height: 100%; object-fit: cover;
-            filter: brightness(0.7) sepia(20%);
-        }
+        /* ==================== PHOTO DIVIDER ==================== */
+        .photo-divider { width: 100%; height: 35vh; min-height: 220px; position: relative; overflow: hidden; }
+        .photo-divider img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.65) sepia(20%); }
         .photo-divider-overlay {
-            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(
-                180deg,
-                var(--ivory) 0%,
-                rgba(250,247,242,0) 20%,
-                rgba(250,247,242,0) 80%,
-                var(--ivory) 100%
-            );
+            position: absolute; inset: 0;
+            background: linear-gradient(180deg, var(--ivory) 0%, rgba(250,247,242,0) 20%, rgba(250,247,242,0) 80%, var(--ivory) 100%);
             pointer-events: none;
         }
-        .photo-divider-text {
-            position: absolute; top: 50%; left: 50%;
-            transform: translate(-50%, -50%); text-align: center;
-            color: var(--white);
-        }
-        .photo-divider-text span {
-            font-family: 'Great Vibes', cursive;
-            font-size: clamp(30px, 8vw, 50px);
-            text-shadow: 0 2px 20px rgba(0,0,0,0.3);
-        }
+        .photo-divider-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); text-align: center; color: var(--white); }
+        .photo-divider-text span { font-family: 'Great Vibes', cursive; font-size: clamp(32px, 9vw, 54px); text-shadow: 0 3px 25px rgba(0,0,0,0.35); }
 
-        /* ============================================
-           INVITATION SECTION
-           ============================================ */
-        .invitation-section {
-            background: var(--ivory);
-            text-align: center;
-            padding: 80px 24px;
-        }
-
+        /* ==================== INVITATION ==================== */
+        .invitation-section { background: var(--ivory); text-align: center; padding: 80px 24px; }
         .invitation-photo-frame {
-            width: 160px; height: 200px;
-            margin: 0 auto 30px;
-            border-radius: 50% 50% 10px 10px;
-            overflow: hidden;
-            border: 3px solid var(--gold-shine);
-            box-shadow: 0 8px 40px rgba(201,169,110,0.2);
+            width: 170px; height: 210px; margin: 0 auto 30px;
+            border-radius: 50% 50% 10px 10px; overflow: hidden;
+            border: 3px solid var(--gold-shine); box-shadow: 0 10px 50px rgba(201,169,110,0.25);
             position: relative;
         }
-        .invitation-photo-frame img {
-            width: 100%; height: 100%; object-fit: cover;
-            filter: sepia(15%) brightness(1.05);
-        }
-        .invitation-photo-frame::after {
-            content: ''; position: absolute; inset: 0;
-            border-radius: inherit;
-            box-shadow: inset 0 0 30px rgba(201,169,110,0.15);
-        }
-
-        .invitation-card {
-            max-width: 550px; width: 100%; padding: 0 10px;
-        }
+        .invitation-photo-frame img { width: 100%; height: 100%; object-fit: cover; filter: sepia(15%) brightness(1.05); }
+        .invitation-photo-frame::after { content: ''; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 30px rgba(201,169,110,0.15); }
+        .invitation-card { max-width: 550px; width: 100%; padding: 0 10px; }
         .section-label {
-            font-family: 'Montserrat', sans-serif; font-weight: 400;
-            font-size: 10px; letter-spacing: 6px; color: var(--gold);
+            font-family: 'Montserrat', sans-serif; font-weight: 500;
+            font-size: 13px; letter-spacing: 6px; color: var(--gold);
             text-transform: uppercase; margin-bottom: 15px;
         }
-        .inv-ornament {
-            width: 180px; height: 20px; margin: 0 auto 25px;
-            display: flex; align-items: center; justify-content: center;
-            position: relative;
-        }
-        .inv-ornament::before {
-            content: ''; position: absolute; width: 100%; height: 1px;
-            background: linear-gradient(90deg, transparent, var(--gold), transparent); opacity: 0.5;
-        }
+        .inv-ornament { width: 180px; height: 20px; margin: 0 auto 25px; display: flex; align-items: center; justify-content: center; position: relative; }
+        .inv-ornament::before { content: ''; position: absolute; width: 100%; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); opacity: 0.5; }
         .inv-ornament svg { position: relative; z-index: 1; background: var(--ivory); padding: 0 8px; }
-
-        .invitation-text {
-            font-family: 'Cormorant Garamond', serif; font-weight: 400;
-            font-size: clamp(18px, 4.5vw, 23px); line-height: 2;
-            color: var(--text-medium); font-style: italic;
-        }
+        .invitation-text { font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: clamp(19px, 4.5vw, 24px); line-height: 2; color: var(--text-medium); font-style: italic; }
         .invitation-text p { margin-bottom: 18px; }
         .invitation-text p:last-child { margin-bottom: 0; }
+        .inv-quote-mark { font-family: 'Great Vibes', cursive; font-size: 60px; color: var(--gold-shine); line-height: 1; margin-bottom: -10px; display: block; }
 
-        .inv-quote-mark {
-            font-family: 'Great Vibes', cursive;
-            font-size: 60px; color: var(--gold-shine); line-height: 1;
-            margin-bottom: -10px; display: block;
-        }
-
-        /* ============================================
-           GALLERY STRIP
-           ============================================ */
-        .gallery-strip {
-            width: 100%; padding: 0;
-            display: flex; gap: 4px;
-            overflow: hidden; height: 28vh; min-height: 180px;
-        }
-        .gallery-strip-item {
-            flex: 1; min-width: 0; position: relative; overflow: hidden;
-        }
-        .gallery-strip-item img {
-            width: 100%; height: 100%; object-fit: cover;
-            transition: transform 6s ease;
-            filter: sepia(10%) brightness(0.95);
-        }
+        /* ==================== GALLERY STRIP ==================== */
+        .gallery-strip { width: 100%; display: flex; gap: 4px; overflow: hidden; height: 28vh; min-height: 180px; }
+        .gallery-strip-item { flex: 1; min-width: 0; position: relative; overflow: hidden; }
+        .gallery-strip-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 6s ease; filter: sepia(10%) brightness(0.95); }
         .gallery-strip-item:hover img { transform: scale(1.08); }
-        .gallery-strip-item::after {
-            content: ''; position: absolute; inset: 0;
-            background: linear-gradient(180deg, rgba(250,247,242,0.15), rgba(201,169,110,0.1));
-        }
+        .gallery-strip-item::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(250,247,242,0.15), rgba(201,169,110,0.1)); }
 
-        /* ============================================
-           DETAILS SECTION
-           ============================================ */
-        .details-section {
-            background: linear-gradient(180deg, var(--ivory) 0%, var(--cream) 50%, var(--ivory) 100%);
-            text-align: center;
-        }
-
+        /* ==================== DETAILS ==================== */
+        .details-section { background: linear-gradient(180deg, var(--ivory) 0%, var(--cream) 50%, var(--ivory) 100%); text-align: center; }
         .details-container { max-width: 500px; width: 100%; }
-
-        .details-header {
-            font-family: 'Cormorant Garamond', serif; font-weight: 600;
-            font-size: clamp(30px, 7vw, 42px); color: var(--text-dark);
-            margin-bottom: 5px; letter-spacing: 2px;
-        }
-        .details-subheader {
-            font-family: 'Montserrat', sans-serif; font-weight: 300;
-            font-size: 10px; letter-spacing: 6px; color: var(--gold);
-            text-transform: uppercase; margin-bottom: 40px;
-        }
+        .details-header { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: clamp(30px, 7vw, 42px); color: var(--text-dark); margin-bottom: 5px; letter-spacing: 2px; }
+        .details-subheader { font-family: 'Montserrat', sans-serif; font-weight: 400; font-size: 13px; letter-spacing: 6px; color: var(--gold); text-transform: uppercase; margin-bottom: 40px; }
 
         .detail-item {
-            margin-bottom: 20px; padding: 28px 24px;
-            background: rgba(255,255,255,0.6);
-            border-radius: 16px;
-            border: 1px solid rgba(201,169,110,0.12);
-            backdrop-filter: blur(10px);
-            transition: transform 0.4s ease, box-shadow 0.4s ease;
-            position: relative;
-            overflow: hidden;
+            margin-bottom: 20px; padding: 28px 24px; background: rgba(255,255,255,0.6);
+            border-radius: 16px; border: 1px solid rgba(201,169,110,0.12);
+            backdrop-filter: blur(10px); transition: transform 0.4s ease, box-shadow 0.4s ease;
+            position: relative; overflow: hidden;
         }
-        .detail-item::before {
-            content: '';
-            position: absolute; top: 0; left: 0; right: 0; height: 2px;
-            background: linear-gradient(90deg, transparent, var(--gold-shine), var(--gold), var(--gold-shine), transparent);
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
+        .detail-item::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--gold-shine), var(--gold), var(--gold-shine), transparent); opacity: 0; transition: opacity 0.4s ease; }
         .detail-item:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(201,169,110,0.15); }
         .detail-item:hover::before { opacity: 0.6; }
 
-        .detail-icon {
-            width: 50px; height: 50px; margin: 0 auto 14px;
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            background: linear-gradient(135deg, rgba(201,169,110,0.1), rgba(201,169,110,0.05));
-            border: 1px solid rgba(201,169,110,0.15);
-        }
+        .detail-icon { width: 50px; height: 50px; margin: 0 auto 14px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, rgba(201,169,110,0.1), rgba(201,169,110,0.05)); border: 1px solid rgba(201,169,110,0.15); }
         .detail-icon svg { width: 22px; height: 22px; stroke: var(--gold); fill: none; stroke-width: 1.5; }
-
-        .detail-label {
-            font-family: 'Montserrat', sans-serif; font-weight: 500;
-            font-size: 9px; letter-spacing: 5px; color: var(--gold);
-            text-transform: uppercase; margin-bottom: 8px;
-        }
-        .detail-value {
-            font-family: 'Cormorant Garamond', serif; font-weight: 600;
-            font-size: clamp(20px, 5vw, 26px); color: var(--text-dark); line-height: 1.4;
-        }
-        .detail-value-sub {
-            font-family: 'Montserrat', sans-serif; font-weight: 300;
-            font-size: 13px; color: var(--text-light); margin-top: 4px;
-        }
+        .detail-label { font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 11px; letter-spacing: 5px; color: var(--gold); text-transform: uppercase; margin-bottom: 8px; }
+        .detail-value { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: clamp(22px, 5.5vw, 28px); color: var(--text-dark); line-height: 1.4; }
+        .detail-value-sub { font-family: 'Montserrat', sans-serif; font-weight: 400; font-size: 15px; color: var(--text-medium); margin-top: 5px; }
 
         .map-button {
-            display: inline-flex; align-items: center; gap: 12px;
-            padding: 16px 36px; margin-top: 15px;
-            border: 1.5px solid var(--gold); border-radius: 60px;
-            color: var(--gold-dark); text-decoration: none;
-            font-family: 'Montserrat', sans-serif; font-weight: 500;
-            font-size: 11px; letter-spacing: 4px; text-transform: uppercase;
-            transition: all 0.4s ease; background: transparent;
-            position: relative; overflow: hidden;
+            display: inline-flex; align-items: center; gap: 12px; padding: 16px 36px; margin-top: 15px;
+            border: 1.5px solid var(--gold); border-radius: 60px; color: var(--gold-dark); text-decoration: none;
+            font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 12px; letter-spacing: 4px;
+            text-transform: uppercase; transition: all 0.4s ease; background: transparent; position: relative; overflow: hidden;
         }
-        .map-button::before {
-            content: ''; position: absolute; inset: 0;
-            background: var(--gold); transform: scaleX(0);
-            transform-origin: left; transition: transform 0.4s ease;
-            border-radius: inherit;
-        }
+        .map-button::before { content: ''; position: absolute; inset: 0; background: var(--gold); transform: scaleX(0); transform-origin: left; transition: transform 0.4s ease; border-radius: inherit; }
         .map-button:hover::before { transform: scaleX(1); }
         .map-button span, .map-button svg { position: relative; z-index: 1; }
         .map-button:hover { color: var(--white); border-color: var(--gold); }
         .map-button:hover svg { stroke: var(--white); }
         .map-button svg { width: 16px; height: 16px; stroke: var(--gold); fill: none; stroke-width: 2; transition: stroke 0.4s ease; }
 
-        /* ============================================
-           COUNTDOWN SECTION
-           ============================================ */
-        .countdown-section {
-            background: linear-gradient(180deg, var(--ivory) 0%, var(--blush) 50%, var(--ivory) 100%);
-            text-align: center; min-height: 70vh;
-            padding: 80px 24px;
-        }
+        /* ==================== COUNTDOWN ==================== */
+        .countdown-section { background: linear-gradient(180deg, var(--ivory) 0%, var(--blush) 50%, var(--ivory) 100%); text-align: center; min-height: 70vh; padding: 80px 24px; }
+        .countdown-title { font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: clamp(26px, 7vw, 38px); color: var(--text-dark); margin-bottom: 5px; }
+        .countdown-subtitle { font-family: 'Montserrat', sans-serif; font-weight: 400; font-size: 13px; letter-spacing: 6px; color: var(--gold); text-transform: uppercase; margin-bottom: 45px; }
 
-        .countdown-title {
-            font-family: 'Cormorant Garamond', serif; font-weight: 400;
-            font-size: clamp(24px, 6vw, 34px); color: var(--text-dark); margin-bottom: 5px;
-        }
-        .countdown-subtitle {
-            font-family: 'Montserrat', sans-serif; font-weight: 300;
-            font-size: 10px; letter-spacing: 6px; color: var(--gold);
-            text-transform: uppercase; margin-bottom: 45px;
-        }
-
-        .countdown-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: clamp(10px, 3vw, 24px);
-            max-width: 480px; margin: 0 auto;
-        }
-        .countdown-item {
-            display: flex; flex-direction: column; align-items: center;
-            padding: 20px 8px;
-            background: rgba(255,255,255,0.5);
-            border-radius: 16px;
-            border: 1px solid rgba(201,169,110,0.1);
-            backdrop-filter: blur(6px);
-            transition: transform 0.3s ease;
-        }
+        .countdown-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(10px, 3vw, 24px); max-width: 500px; margin: 0 auto; }
+        .countdown-item { display: flex; flex-direction: column; align-items: center; padding: 22px 8px; background: rgba(255,255,255,0.5); border-radius: 16px; border: 1px solid rgba(201,169,110,0.1); backdrop-filter: blur(6px); transition: transform 0.3s ease; }
         .countdown-item:hover { transform: translateY(-4px); }
-
         .countdown-number {
             font-family: 'Cormorant Garamond', serif; font-weight: 300;
-            font-size: clamp(36px, 10vw, 58px); color: var(--text-dark);
-            line-height: 1; margin-bottom: 8px;
+            font-size: clamp(40px, 12vw, 62px); color: var(--text-dark); line-height: 1; margin-bottom: 10px;
             background: linear-gradient(135deg, var(--text-dark), var(--gold-dark));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            background-clip: text;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
         }
-        .countdown-label {
-            font-family: 'Montserrat', sans-serif; font-weight: 400;
-            font-size: 8px; letter-spacing: 3px; text-transform: uppercase;
-            color: var(--text-light);
-        }
+        .countdown-label { font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--text-medium); }
 
-        .countdown-hearts {
-            margin-top: 30px;
-            display: flex; align-items: center; justify-content: center; gap: 15px;
-        }
-        .countdown-hearts svg {
-            width: 18px; height: 18px;
-            fill: var(--gold-light); opacity: 0.4;
-            animation: heartPulse 2s ease-in-out infinite;
-        }
-        .countdown-hearts svg:nth-child(2) { animation-delay: 0.3s; width: 24px; height: 24px; opacity: 0.6; }
+        .countdown-hearts { margin-top: 35px; display: flex; align-items: center; justify-content: center; gap: 15px; }
+        .countdown-hearts svg { width: 18px; height: 18px; fill: var(--gold-light); opacity: 0.4; animation: heartPulse 2s ease-in-out infinite; }
+        .countdown-hearts svg:nth-child(2) { animation-delay: 0.3s; width: 26px; height: 26px; opacity: 0.6; }
         .countdown-hearts svg:nth-child(3) { animation-delay: 0.6s; }
-        @keyframes heartPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-        }
+        @keyframes heartPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
 
-        /* ============================================
-           RSVP SECTION
-           ============================================ */
-        .rsvp-section {
-            background: linear-gradient(180deg, var(--ivory) 0%, var(--cream) 50%, var(--blush) 100%);
-            text-align: center;
-        }
+        /* ==================== RSVP ==================== */
+        .rsvp-section { background: linear-gradient(180deg, var(--ivory) 0%, var(--cream) 50%, var(--blush) 100%); text-align: center; }
         .rsvp-container { max-width: 480px; width: 100%; }
-        .rsvp-title {
-            font-family: 'Cormorant Garamond', serif; font-weight: 600;
-            font-size: clamp(28px, 7vw, 40px); color: var(--text-dark); margin-bottom: 5px;
-        }
-        .rsvp-subtitle {
-            font-family: 'Montserrat', sans-serif; font-weight: 300;
-            font-size: 10px; letter-spacing: 5px; color: var(--gold);
-            text-transform: uppercase; margin-bottom: 15px;
-        }
-        .rsvp-description {
-            font-family: 'Cormorant Garamond', serif; font-weight: 400;
-            font-size: clamp(16px, 3.5vw, 19px); color: var(--text-medium);
-            font-style: italic; line-height: 1.8; margin-bottom: 35px;
-        }
+        .rsvp-title { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: clamp(28px, 7vw, 40px); color: var(--text-dark); margin-bottom: 5px; }
+        .rsvp-subtitle { font-family: 'Montserrat', sans-serif; font-weight: 400; font-size: 12px; letter-spacing: 5px; color: var(--gold); text-transform: uppercase; margin-bottom: 15px; }
+        .rsvp-description { font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: clamp(17px, 4vw, 20px); color: var(--text-medium); font-style: italic; line-height: 1.8; margin-bottom: 35px; }
 
-        .rsvp-form {
-            display: flex; flex-direction: column; gap: 22px;
-            background: rgba(255,255,255,0.5);
-            padding: 30px 24px;
-            border-radius: 20px;
-            border: 1px solid rgba(201,169,110,0.12);
-            backdrop-filter: blur(8px);
-        }
+        .rsvp-form { display: flex; flex-direction: column; gap: 22px; background: rgba(255,255,255,0.5); padding: 30px 24px; border-radius: 20px; border: 1px solid rgba(201,169,110,0.12); backdrop-filter: blur(8px); }
         .form-group { text-align: left; }
-        .form-label {
-            font-family: 'Montserrat', sans-serif; font-weight: 500;
-            font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
-            color: var(--text-light); margin-bottom: 8px; display: block;
-        }
-        .form-input {
-            width: 100%; padding: 15px 20px;
-            border: 1.5px solid rgba(201,169,110,0.2); border-radius: 12px;
-            background: rgba(255,255,255,0.8);
-            font-family: 'Montserrat', sans-serif; font-weight: 300;
-            font-size: 15px; color: var(--text-dark);
-            transition: all 0.3s ease; outline: none;
-        }
+        .form-label { font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--text-light); margin-bottom: 8px; display: block; }
+        .form-input { width: 100%; padding: 15px 20px; border: 1.5px solid rgba(201,169,110,0.2); border-radius: 12px; background: rgba(255,255,255,0.8); font-family: 'Montserrat', sans-serif; font-weight: 300; font-size: 15px; color: var(--text-dark); transition: all 0.3s ease; outline: none; }
         .form-input::placeholder { color: var(--text-light); opacity: 0.5; }
-        .form-input:focus {
-            border-color: var(--gold);
-            box-shadow: 0 0 0 4px rgba(201,169,110,0.08);
-            background: var(--white);
-        }
-
+        .form-input:focus { border-color: var(--gold); box-shadow: 0 0 0 4px rgba(201,169,110,0.08); background: var(--white); }
         .radio-group { display: flex; gap: 12px; }
         .radio-option { flex: 1; position: relative; }
         .radio-option input { position: absolute; opacity: 0; width: 0; height: 0; }
-        .radio-label {
-            display: flex; align-items: center; justify-content: center;
-            padding: 15px 10px;
-            border: 1.5px solid rgba(201,169,110,0.2); border-radius: 12px;
-            cursor: pointer; font-family: 'Montserrat', sans-serif;
-            font-weight: 400; font-size: 12px; color: var(--text-medium);
-            transition: all 0.3s ease; background: rgba(255,255,255,0.8);
-            text-align: center; line-height: 1.3;
-        }
-        .radio-option input:checked + .radio-label {
-            border-color: var(--gold);
-            background: linear-gradient(135deg, rgba(201,169,110,0.1), rgba(212,186,130,0.18));
-            color: var(--gold-dark); font-weight: 500;
-            box-shadow: 0 0 0 4px rgba(201,169,110,0.08);
-        }
+        .radio-label { display: flex; align-items: center; justify-content: center; padding: 15px 10px; border: 1.5px solid rgba(201,169,110,0.2); border-radius: 12px; cursor: pointer; font-family: 'Montserrat', sans-serif; font-weight: 400; font-size: 13px; color: var(--text-medium); transition: all 0.3s ease; background: rgba(255,255,255,0.8); text-align: center; line-height: 1.3; }
+        .radio-option input:checked + .radio-label { border-color: var(--gold); background: linear-gradient(135deg, rgba(201,169,110,0.1), rgba(212,186,130,0.18)); color: var(--gold-dark); font-weight: 500; box-shadow: 0 0 0 4px rgba(201,169,110,0.08); }
         .radio-label:hover { border-color: var(--gold-light); background: rgba(255,255,255,0.95); }
-
-        .submit-btn {
-            padding: 17px 44px; border: none; border-radius: 60px;
-            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-            color: var(--white);
-            font-family: 'Montserrat', sans-serif; font-weight: 500;
-            font-size: 12px; letter-spacing: 5px; text-transform: uppercase;
-            cursor: pointer; transition: all 0.4s ease;
-            margin-top: 5px; position: relative; overflow: hidden;
-            box-shadow: 0 4px 20px rgba(201,169,110,0.3);
-        }
-        .submit-btn::before {
-            content: ''; position: absolute; top: 0; left: -100%;
-            width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
-            animation: shimmer 3s infinite;
-        }
+        .submit-btn { padding: 17px 44px; border: none; border-radius: 60px; background: linear-gradient(135deg, var(--gold), var(--gold-dark)); color: var(--white); font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 13px; letter-spacing: 5px; text-transform: uppercase; cursor: pointer; transition: all 0.4s ease; margin-top: 5px; position: relative; overflow: hidden; box-shadow: 0 4px 20px rgba(201,169,110,0.3); }
+        .submit-btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent); animation: shimmer 3s infinite; }
         @keyframes shimmer { 0% { left: -100%; } 100% { left: 100%; } }
-        .submit-btn:hover {
-            box-shadow: 0 8px 30px rgba(201,169,110,0.45);
-            transform: translateY(-3px);
-        }
+        .submit-btn:hover { box-shadow: 0 8px 30px rgba(201,169,110,0.45); transform: translateY(-3px); }
         .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-        .submit-btn:disabled:hover { box-shadow: 0 4px 20px rgba(201,169,110,0.3); transform: none; }
 
-        .success-message {
-            display: none; padding: 40px 20px; text-align: center;
-            animation: fadeInSuccess 0.8s ease;
-        }
+        .success-message { display: none; padding: 40px 20px; text-align: center; animation: fadeInSuccess 0.8s ease; }
         .success-message.show { display: block; }
         @keyframes fadeInSuccess { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
-
-        .success-icon {
-            width: 70px; height: 70px; margin: 0 auto 20px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, rgba(201,169,110,0.1), rgba(201,169,110,0.05));
-            border: 2px solid var(--gold);
-            display: flex; align-items: center; justify-content: center;
-            animation: successPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
+        .success-icon { width: 70px; height: 70px; margin: 0 auto 20px; border-radius: 50%; background: linear-gradient(135deg, rgba(201,169,110,0.1), rgba(201,169,110,0.05)); border: 2px solid var(--gold); display: flex; align-items: center; justify-content: center; animation: successPop 0.6s cubic-bezier(0.175,0.885,0.32,1.275); }
         @keyframes successPop { 0% { transform: scale(0); } 100% { transform: scale(1); } }
         .success-icon svg { width: 30px; height: 30px; stroke: var(--gold); fill: none; stroke-width: 2.5; }
         .success-title { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 28px; color: var(--text-dark); margin-bottom: 10px; }
-        .success-text { font-family: 'Montserrat', sans-serif; font-weight: 300; font-size: 14px; color: var(--text-medium); line-height: 1.7; }
+        .success-text { font-family: 'Montserrat', sans-serif; font-weight: 300; font-size: 15px; color: var(--text-medium); line-height: 1.7; }
 
-        /* ============================================
-           FOOTER
-           ============================================ */
-        .footer {
-            padding: 50px 24px; text-align: center;
-            background: linear-gradient(180deg, var(--blush), var(--cream));
-            position: relative; overflow: hidden;
-        }
-        .footer::before {
-            content: ''; position: absolute;
-            top: 0; left: 0; right: 0; height: 1px;
-            background: linear-gradient(90deg, transparent, var(--gold-shine), transparent);
-            opacity: 0.4;
-        }
-        .footer-names { font-family: 'Great Vibes', cursive; font-size: clamp(32px, 8vw, 44px); color: var(--gold); margin-bottom: 8px; }
-        .footer-date { font-family: 'Montserrat', sans-serif; font-weight: 300; font-size: 11px; letter-spacing: 6px; color: var(--text-light); }
+        /* ==================== FOOTER ==================== */
+        .footer { padding: 50px 24px; text-align: center; background: linear-gradient(180deg, var(--blush), var(--cream)); position: relative; overflow: hidden; }
+        .footer::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--gold-shine), transparent); opacity: 0.4; }
+        .footer-names { font-family: 'Great Vibes', cursive; font-size: clamp(34px, 9vw, 48px); color: var(--gold); margin-bottom: 10px; }
+        .footer-date { font-family: 'Montserrat', sans-serif; font-weight: 400; font-size: 14px; letter-spacing: 6px; color: var(--text-medium); }
         .footer-ornament { margin-top: 20px; opacity: 0.3; }
         .footer-ornament svg { width: 80px; height: 30px; }
 
-        /* ============================================
-           RESPONSIVE
-           ============================================ */
-        @media (max-width: 380px) {
-            .section { padding: 50px 16px; }
-            .hero-names { letter-spacing: 4px; }
-            .radio-group { flex-direction: column; }
-            .rsvp-form { padding: 20px 16px; }
-        }
-        @media (min-width: 768px) {
-            .section { padding: 100px 40px; }
-        }
+        /* ==================== RESPONSIVE ==================== */
+        @media (max-width: 380px) { .section { padding: 50px 16px; } .hero-names { letter-spacing: 4px; } .radio-group { flex-direction: column; } .rsvp-form { padding: 20px 16px; } }
+        @media (min-width: 768px) { .section { padding: 100px 40px; } }
 
-        /* Parallax-like subtle bg movement */
-        .bg-shimmer {
-            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            pointer-events: none; z-index: 0;
-            background: linear-gradient(
-                45deg,
-                transparent 30%,
-                rgba(201,169,110,0.02) 50%,
-                transparent 70%
-            );
-            background-size: 200% 200%;
-            animation: bgShimmer 8s ease-in-out infinite;
-        }
-        @keyframes bgShimmer {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
+        .bg-shimmer { position: absolute; inset: 0; pointer-events: none; z-index: 0; background: linear-gradient(45deg, transparent 30%, rgba(201,169,110,0.02) 50%, transparent 70%); background-size: 200% 200%; animation: bgShimmer 8s ease-in-out infinite; }
+        @keyframes bgShimmer { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
     </style>
 </head>
 <body>
 
+    <!-- ==================== WELCOME SPLASH (enables audio autoplay) ==================== -->
+    <div class="welcome-splash" id="welcomeSplash">
+        <div class="welcome-splash-inner">
+            <div class="welcome-splash-orn">
+                <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="40" cy="40" r="36" fill="none" stroke="#C9A96E" stroke-width="0.5" stroke-dasharray="4 6"/>
+                    <circle cx="40" cy="40" r="30" fill="none" stroke="#C9A96E" stroke-width="0.3"/>
+                    <circle cx="34" cy="40" r="8" fill="none" stroke="#C9A96E" stroke-width="0.7"/>
+                    <circle cx="46" cy="40" r="8" fill="none" stroke="#C9A96E" stroke-width="0.7"/>
+                    <path d="M40 4 L42 12 L40 10 L38 12 Z" fill="#C9A96E" opacity="0.4"/>
+                    <path d="M40 76 L42 68 L40 70 L38 68 Z" fill="#C9A96E" opacity="0.4"/>
+                    <path d="M4 40 L12 38 L10 40 L12 42 Z" fill="#C9A96E" opacity="0.4"/>
+                    <path d="M76 40 L68 38 L70 40 L68 42 Z" fill="#C9A96E" opacity="0.4"/>
+                </svg>
+            </div>
+            <div class="welcome-splash-names">ДИАСХАН <span class="amp">&</span> ЗАРИНА</div>
+            <div class="welcome-splash-date">16 · 08 · 2026</div>
+            <button class="welcome-splash-btn" id="enterBtn">
+                <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                Ашу
+            </button>
+        </div>
+    </div>
+
     <!-- PRELOADER -->
-    <div class="preloader" id="preloader">
+    <div class="preloader hidden" id="preloader">
         <div class="preloader-ring"></div>
-        <div class="preloader-text">Зарина & Диасхан</div>
+        <div class="preloader-text">Диасхан & Зарина</div>
     </div>
 
     <!-- PARTICLES -->
     <div class="particles-container" id="particles"></div>
 
-    <!-- BACKGROUND MUSIC -->
-    <!--
-        ====================================================================
-        ФОНДЫҚ МУЗЫКА: src="" ішіне музыка файлыңыздың жолын қойыңыз.
-        Мысалы: src="music.mp3"
-        ====================================================================
-    -->
+    <!-- BACKGROUND MUSIC (Web Audio API — generated piano) -->
     <audio id="bgMusic" loop preload="auto">
+        <!--
+            ====================================================================
+            ФОНДЫҚ МУЗЫКА: src="" ішіне музыка файлыңыздың жолын қойыңыз.
+            Мысалы: src="music.mp3"
+            Егер mp3 файл болмаса — Web Audio API арқылы
+            автоматты пиано мелодия ойнайды.
+            ====================================================================
+        -->
         <source src="" type="audio/mpeg">
     </audio>
 
@@ -854,90 +472,43 @@
         </div>
     </button>
 
-    <!-- ==========================================
-         SECTION 1: HERO
-         ========================================== -->
+    <!-- ==================== HERO ==================== -->
     <section class="section hero" id="hero">
         <div class="bg-shimmer"></div>
-
-        <!-- Corner ornaments with draw animation -->
         <div class="orn-border-wrap">
-            <div class="orn-line top"></div>
-            <div class="orn-line bottom"></div>
-            <div class="orn-line left"></div>
-            <div class="orn-line right"></div>
+            <div class="orn-line top"></div><div class="orn-line bottom"></div><div class="orn-line left"></div><div class="orn-line right"></div>
             <div class="orn-corner tl"><svg viewBox="0 0 100 100"><path d="M5 5 L5 30 Q5 45 15 50 L30 55 Q42 58 42 45 L42 35 Q42 22 52 20 L65 18 Q75 16 75 8 L75 5" fill="none" stroke="#C9A96E" stroke-width="1.2"/><path d="M5 5 L25 5 Q38 5 38 18 L38 28 Q38 38 48 38 L60 38" fill="none" stroke="#C9A96E" stroke-width="0.8"/><circle cx="5" cy="5" r="2" fill="#C9A96E" opacity="0.4"/></svg></div>
             <div class="orn-corner tr"><svg viewBox="0 0 100 100"><path d="M5 5 L5 30 Q5 45 15 50 L30 55 Q42 58 42 45 L42 35 Q42 22 52 20 L65 18 Q75 16 75 8 L75 5" fill="none" stroke="#C9A96E" stroke-width="1.2"/><path d="M5 5 L25 5 Q38 5 38 18 L38 28 Q38 38 48 38 L60 38" fill="none" stroke="#C9A96E" stroke-width="0.8"/><circle cx="5" cy="5" r="2" fill="#C9A96E" opacity="0.4"/></svg></div>
             <div class="orn-corner bl"><svg viewBox="0 0 100 100"><path d="M5 5 L5 30 Q5 45 15 50 L30 55 Q42 58 42 45 L42 35 Q42 22 52 20 L65 18 Q75 16 75 8 L75 5" fill="none" stroke="#C9A96E" stroke-width="1.2"/><path d="M5 5 L25 5 Q38 5 38 18 L38 28 Q38 38 48 38 L60 38" fill="none" stroke="#C9A96E" stroke-width="0.8"/><circle cx="5" cy="5" r="2" fill="#C9A96E" opacity="0.4"/></svg></div>
             <div class="orn-corner br"><svg viewBox="0 0 100 100"><path d="M5 5 L5 30 Q5 45 15 50 L30 55 Q42 58 42 45 L42 35 Q42 22 52 20 L65 18 Q75 16 75 8 L75 5" fill="none" stroke="#C9A96E" stroke-width="1.2"/><path d="M5 5 L25 5 Q38 5 38 18 L38 28 Q38 38 48 38 L60 38" fill="none" stroke="#C9A96E" stroke-width="0.8"/><circle cx="5" cy="5" r="2" fill="#C9A96E" opacity="0.4"/></svg></div>
         </div>
 
-        <!-- Decorative side photos -->
-        <div class="hero-photo-left">
-            <img src="https://images.pexels.com/photos/31046043/pexels-photo-31046043.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=400" alt="" loading="lazy">
-        </div>
-        <div class="hero-photo-right">
-            <img src="https://images.pexels.com/photos/31046052/pexels-photo-31046052.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=400" alt="" loading="lazy">
-        </div>
+        <div class="hero-photo-left"><img src="https://images.pexels.com/photos/31046043/pexels-photo-31046043.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=400" alt="" loading="lazy"></div>
+        <div class="hero-photo-right"><img src="https://images.pexels.com/photos/31046052/pexels-photo-31046052.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=400" alt="" loading="lazy"></div>
 
-        <!-- Rotating mandala ornament -->
-        <svg class="mandala-ornament left" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
-            <g fill="none" stroke="#C9A96E" stroke-width="0.5">
-                <circle cx="200" cy="200" r="180"/><circle cx="200" cy="200" r="150"/><circle cx="200" cy="200" r="120"/>
-                <path d="M200 20 L215 80 L200 60 L185 80 Z"/><path d="M200 380 L215 320 L200 340 L185 320 Z"/>
-                <path d="M20 200 L80 185 L60 200 L80 215 Z"/><path d="M380 200 L320 185 L340 200 L320 215 Z"/>
-                <path d="M60 60 L110 95 L85 90 L95 110 Z"/><path d="M340 340 L290 305 L315 310 L305 290 Z"/>
-                <path d="M340 60 L290 95 L315 90 L305 110 Z"/><path d="M60 340 L110 305 L85 310 L95 290 Z"/>
-                <circle cx="200" cy="200" r="90" stroke-dasharray="8 12"/><circle cx="200" cy="200" r="60" stroke-dasharray="4 8"/>
-                <ellipse cx="200" cy="200" rx="180" ry="100" transform="rotate(45, 200, 200)" stroke-dasharray="6 10"/>
-                <ellipse cx="200" cy="200" rx="180" ry="100" transform="rotate(-45, 200, 200)" stroke-dasharray="6 10"/>
-            </g>
-        </svg>
-        <svg class="mandala-ornament right" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
-            <g fill="none" stroke="#C9A96E" stroke-width="0.5">
-                <circle cx="200" cy="200" r="180"/><circle cx="200" cy="200" r="150"/><circle cx="200" cy="200" r="120"/>
-                <path d="M200 20 L215 80 L200 60 L185 80 Z"/><path d="M200 380 L215 320 L200 340 L185 320 Z"/>
-                <path d="M20 200 L80 185 L60 200 L80 215 Z"/><path d="M380 200 L320 185 L340 200 L320 215 Z"/>
-                <circle cx="200" cy="200" r="90" stroke-dasharray="8 12"/><circle cx="200" cy="200" r="60" stroke-dasharray="4 8"/>
-                <ellipse cx="200" cy="200" rx="180" ry="100" transform="rotate(30, 200, 200)" stroke-dasharray="6 10"/>
-                <ellipse cx="200" cy="200" rx="180" ry="100" transform="rotate(-30, 200, 200)" stroke-dasharray="6 10"/>
-            </g>
-        </svg>
+        <svg class="mandala-ornament left" viewBox="0 0 400 400"><g fill="none" stroke="#C9A96E" stroke-width="0.5"><circle cx="200" cy="200" r="180"/><circle cx="200" cy="200" r="150"/><circle cx="200" cy="200" r="120"/><path d="M200 20 L215 80 L200 60 L185 80 Z"/><path d="M200 380 L215 320 L200 340 L185 320 Z"/><path d="M20 200 L80 185 L60 200 L80 215 Z"/><path d="M380 200 L320 185 L340 200 L320 215 Z"/><path d="M60 60 L110 95 L85 90 L95 110 Z"/><path d="M340 340 L290 305 L315 310 L305 290 Z"/><path d="M340 60 L290 95 L315 90 L305 110 Z"/><path d="M60 340 L110 305 L85 310 L95 290 Z"/><circle cx="200" cy="200" r="90" stroke-dasharray="8 12"/><circle cx="200" cy="200" r="60" stroke-dasharray="4 8"/><ellipse cx="200" cy="200" rx="180" ry="100" transform="rotate(45,200,200)" stroke-dasharray="6 10"/><ellipse cx="200" cy="200" rx="180" ry="100" transform="rotate(-45,200,200)" stroke-dasharray="6 10"/></g></svg>
+        <svg class="mandala-ornament right" viewBox="0 0 400 400"><g fill="none" stroke="#C9A96E" stroke-width="0.5"><circle cx="200" cy="200" r="180"/><circle cx="200" cy="200" r="150"/><circle cx="200" cy="200" r="120"/><path d="M200 20 L215 80 L200 60 L185 80 Z"/><path d="M200 380 L215 320 L200 340 L185 320 Z"/><path d="M20 200 L80 185 L60 200 L80 215 Z"/><path d="M380 200 L320 185 L340 200 L320 215 Z"/><circle cx="200" cy="200" r="90" stroke-dasharray="8 12"/><circle cx="200" cy="200" r="60" stroke-dasharray="4 8"/><ellipse cx="200" cy="200" rx="180" ry="100" transform="rotate(30,200,200)" stroke-dasharray="6 10"/><ellipse cx="200" cy="200" rx="180" ry="100" transform="rotate(-30,200,200)" stroke-dasharray="6 10"/></g></svg>
 
         <div class="hero-date-top fade-in">16 · 08 · 2026</div>
 
-        <!-- Ornamental ring -->
         <div class="hero-ornament-ring fade-in fade-in-delay-1">
-            <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="60" cy="60" r="55" fill="none" stroke="#C9A96E" stroke-width="0.5" stroke-dasharray="4 6"/>
-                <circle cx="60" cy="60" r="48" fill="none" stroke="#C9A96E" stroke-width="0.3"/>
-                <path d="M60 5 L63 15 L60 12 L57 15 Z" fill="#C9A96E" opacity="0.4"/>
-                <path d="M60 115 L63 105 L60 108 L57 105 Z" fill="#C9A96E" opacity="0.4"/>
-                <path d="M5 60 L15 57 L12 60 L15 63 Z" fill="#C9A96E" opacity="0.4"/>
-                <path d="M115 60 L105 57 L108 60 L105 63 Z" fill="#C9A96E" opacity="0.4"/>
-                <path d="M20 20 L28 25 L23 23 L25 28 Z" fill="#C9A96E" opacity="0.3"/>
-                <path d="M100 100 L92 95 L97 97 L95 92 Z" fill="#C9A96E" opacity="0.3"/>
-                <path d="M100 20 L92 25 L97 23 L95 28 Z" fill="#C9A96E" opacity="0.3"/>
-                <path d="M20 100 L28 95 L23 97 L25 92 Z" fill="#C9A96E" opacity="0.3"/>
-                <!-- Rings icon in center -->
-                <circle cx="54" cy="60" r="10" fill="none" stroke="#C9A96E" stroke-width="0.8"/>
-                <circle cx="66" cy="60" r="10" fill="none" stroke="#C9A96E" stroke-width="0.8"/>
-            </svg>
+            <svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="55" fill="none" stroke="#C9A96E" stroke-width="0.5" stroke-dasharray="4 6"/><circle cx="60" cy="60" r="48" fill="none" stroke="#C9A96E" stroke-width="0.3"/><path d="M60 5 L63 15 L60 12 L57 15 Z" fill="#C9A96E" opacity="0.4"/><path d="M60 115 L63 105 L60 108 L57 105 Z" fill="#C9A96E" opacity="0.4"/><path d="M5 60 L15 57 L12 60 L15 63 Z" fill="#C9A96E" opacity="0.4"/><path d="M115 60 L105 57 L108 60 L105 63 Z" fill="#C9A96E" opacity="0.4"/><path d="M20 20 L28 25 L23 23 L25 28 Z" fill="#C9A96E" opacity="0.3"/><path d="M100 100 L92 95 L97 97 L95 92 Z" fill="#C9A96E" opacity="0.3"/><path d="M100 20 L92 25 L97 23 L95 28 Z" fill="#C9A96E" opacity="0.3"/><path d="M20 100 L28 95 L23 97 L25 92 Z" fill="#C9A96E" opacity="0.3"/><circle cx="54" cy="60" r="10" fill="none" stroke="#C9A96E" stroke-width="0.8"/><circle cx="66" cy="60" r="10" fill="none" stroke="#C9A96E" stroke-width="0.8"/></svg>
         </div>
 
         <h1 class="hero-names fade-in fade-in-delay-2">
-            ЗАРИНА
-            <span class="ampersand">&</span>
             ДИАСХАН
+            <span class="ampersand">&</span>
+            ЗАРИНА
         </h1>
 
         <div class="hero-line-orn fade-in fade-in-delay-3"></div>
-
         <p class="hero-subtitle fade-in fade-in-delay-4">Үйлену тойына шақыру</p>
 
-        <div class="scroll-indicator fade-in fade-in-delay-5">
-            <span>Төмен</span>
-            <div class="scroll-mouse"></div>
+        <!-- Scroll arrow instead of mouse -->
+        <div class="scroll-arrow fade-in fade-in-delay-5">
+            <span class="scroll-arrow-label">Төмен</span>
+            <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+            <svg class="arrow-2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
     </section>
 
@@ -945,122 +516,64 @@
     <div class="photo-divider">
         <img src="https://images.pexels.com/photos/7788740/pexels-photo-7788740.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200" alt="" loading="lazy">
         <div class="photo-divider-overlay"></div>
-        <div class="photo-divider-text fade-in">
-            <span>Бақыт басталады...</span>
-        </div>
+        <div class="photo-divider-text fade-in"><span>Бақыт басталады...</span></div>
     </div>
 
-    <!-- ==========================================
-         SECTION 2: INVITATION
-         ========================================== -->
+    <!-- ==================== INVITATION ==================== -->
     <section class="section invitation-section" id="invitation">
         <div class="bg-shimmer"></div>
-
         <div class="invitation-photo-frame fade-scale">
             <img src="https://images.pexels.com/photos/12108439/pexels-photo-12108439.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=400" alt="" loading="lazy">
         </div>
-
         <div class="invitation-card">
             <div class="section-label fade-in">Құрметті қонақ</div>
-
             <div class="inv-ornament fade-in fade-in-delay-1">
-                <svg width="50" height="20" viewBox="0 0 50 20" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M0 10 L8 4 L12 10 L8 16 Z" fill="none" stroke="#C9A96E" stroke-width="0.8"/>
-                    <line x1="12" y1="10" x2="20" y2="10" stroke="#C9A96E" stroke-width="0.5"/>
-                    <circle cx="25" cy="10" r="3.5" fill="none" stroke="#C9A96E" stroke-width="0.8"/>
-                    <circle cx="25" cy="10" r="1.2" fill="#C9A96E"/>
-                    <line x1="30" y1="10" x2="38" y2="10" stroke="#C9A96E" stroke-width="0.5"/>
-                    <path d="M50 10 L42 4 L38 10 L42 16 Z" fill="none" stroke="#C9A96E" stroke-width="0.8"/>
-                </svg>
+                <svg width="50" height="20" viewBox="0 0 50 20"><path d="M0 10 L8 4 L12 10 L8 16 Z" fill="none" stroke="#C9A96E" stroke-width="0.8"/><line x1="12" y1="10" x2="20" y2="10" stroke="#C9A96E" stroke-width="0.5"/><circle cx="25" cy="10" r="3.5" fill="none" stroke="#C9A96E" stroke-width="0.8"/><circle cx="25" cy="10" r="1.2" fill="#C9A96E"/><line x1="30" y1="10" x2="38" y2="10" stroke="#C9A96E" stroke-width="0.5"/><path d="M50 10 L42 4 L38 10 L42 16 Z" fill="none" stroke="#C9A96E" stroke-width="0.8"/></svg>
             </div>
-
             <div class="invitation-text">
                 <span class="inv-quote-mark fade-in fade-in-delay-1">"</span>
-                <p class="fade-in fade-in-delay-2">
-                    Біздің өмірдегі ең бақытты күнге — жаңа шаңырақтың құрылу мерекесіне Сізді шын жүректен шақырамыз!
-                </p>
-                <p class="fade-in fade-in-delay-3">
-                    Осы қуанышты сәтті бірге бөлісіп, дастарханымыздың төрінде отырып, бізге ақ батаңызды беріп, мерекемізге шырай беруіңізді тілейміз.
-                </p>
-                <p class="fade-in fade-in-delay-4">
-                    Сіздің қатысуыңыз — біз үшін ең қымбат сыйлық!
-                </p>
+                <p class="fade-in fade-in-delay-2">Біздің өмірдегі ең бақытты күнге — жаңа шаңырақтың құрылу мерекесіне Сізді шын жүректен шақырамыз!</p>
+                <p class="fade-in fade-in-delay-3">Осы қуанышты сәтті бірге бөлісіп, дастарханымыздың төрінде отырып, бізге ақ батаңызды беріп, мерекемізге шырай беруіңізді тілейміз.</p>
+                <p class="fade-in fade-in-delay-4">Сіздің қатысуыңыз — біз үшін ең қымбат сыйлық!</p>
             </div>
         </div>
     </section>
 
     <!-- GALLERY STRIP -->
     <div class="gallery-strip">
-        <div class="gallery-strip-item">
-            <img src="https://images.pexels.com/photos/33914530/pexels-photo-33914530.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=400&w=400" alt="" loading="lazy">
-        </div>
-        <div class="gallery-strip-item">
-            <img src="https://images.pexels.com/photos/36028957/pexels-photo-36028957.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=400&w=400" alt="" loading="lazy">
-        </div>
-        <div class="gallery-strip-item">
-            <img src="https://images.pexels.com/photos/2849742/pexels-photo-2849742.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=400&w=400" alt="" loading="lazy">
-        </div>
-        <div class="gallery-strip-item">
-            <img src="https://images.pexels.com/photos/30311728/pexels-photo-30311728.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=400&w=400" alt="" loading="lazy">
-        </div>
+        <div class="gallery-strip-item"><img src="https://images.pexels.com/photos/33914530/pexels-photo-33914530.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=400&w=400" alt="" loading="lazy"></div>
+        <div class="gallery-strip-item"><img src="https://images.pexels.com/photos/36028957/pexels-photo-36028957.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=400&w=400" alt="" loading="lazy"></div>
+        <div class="gallery-strip-item"><img src="https://images.pexels.com/photos/2849742/pexels-photo-2849742.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=400&w=400" alt="" loading="lazy"></div>
+        <div class="gallery-strip-item"><img src="https://images.pexels.com/photos/30311728/pexels-photo-30311728.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=400&w=400" alt="" loading="lazy"></div>
     </div>
 
-    <!-- ==========================================
-         SECTION 3: DETAILS
-         ========================================== -->
+    <!-- ==================== DETAILS ==================== -->
     <section class="section details-section" id="details">
         <div class="bg-shimmer"></div>
-
-        <!-- Rotating side ornaments -->
-        <svg class="mandala-ornament left" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
-            <g fill="none" stroke="#C9A96E" stroke-width="0.4" opacity="0.8">
-                <circle cx="200" cy="200" r="190" stroke-dasharray="3 8"/>
-                <circle cx="200" cy="200" r="160" stroke-dasharray="5 10"/>
-                <circle cx="200" cy="200" r="130"/>
-                <path d="M200 10 Q230 100 200 200 Q170 100 200 10"/>
-                <path d="M200 390 Q230 300 200 200 Q170 300 200 390"/>
-                <path d="M10 200 Q100 230 200 200 Q100 170 10 200"/>
-                <path d="M390 200 Q300 230 200 200 Q300 170 390 200"/>
-            </g>
-        </svg>
+        <svg class="mandala-ornament left" viewBox="0 0 400 400"><g fill="none" stroke="#C9A96E" stroke-width="0.4" opacity="0.8"><circle cx="200" cy="200" r="190" stroke-dasharray="3 8"/><circle cx="200" cy="200" r="160" stroke-dasharray="5 10"/><circle cx="200" cy="200" r="130"/><path d="M200 10 Q230 100 200 200 Q170 100 200 10"/><path d="M200 390 Q230 300 200 200 Q170 300 200 390"/><path d="M10 200 Q100 230 200 200 Q100 170 10 200"/><path d="M390 200 Q300 230 200 200 Q300 170 390 200"/></g></svg>
 
         <div class="details-container">
             <h2 class="details-header fade-in">Той мәліметтері</h2>
             <div class="details-subheader fade-in fade-in-delay-1">Уақыты мен орны</div>
 
             <div class="detail-item fade-in fade-in-delay-2">
-                <div class="detail-icon">
-                    <svg viewBox="0 0 24 24">
-                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                        <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
-                        <line x1="3" y1="10" x2="21" y2="10"/>
-                    </svg>
-                </div>
+                <div class="detail-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
                 <div class="detail-label">Күні мен уақыты</div>
                 <div class="detail-value">16 тамыз 2026 жыл</div>
                 <div class="detail-value-sub">Жексенбі, сағат 14:00</div>
             </div>
 
             <div class="detail-item fade-in fade-in-delay-3">
-                <div class="detail-icon">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                        <circle cx="12" cy="10" r="3"/>
-                    </svg>
-                </div>
+                <div class="detail-icon"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
                 <div class="detail-label">Той өтетін орын</div>
                 <div class="detail-value">"Меруерт" Тойханасы</div>
                 <div class="detail-value-sub">Көкшетау қаласы</div>
                 <div class="detail-value-sub">М. Әуезова көшесі, 189</div>
             </div>
 
-            <a href="https://2gis.kz/kokshetau/search/%D0%9C.%20%D0%90%D1%83%D1%8D%D0%B7%D0%BE%D0%B2%D0%B0%20189"
-               target="_blank" rel="noopener noreferrer"
-               class="map-button fade-in fade-in-delay-4">
-                <svg viewBox="0 0 24 24">
-                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                    <circle cx="12" cy="10" r="3"/>
-                </svg>
+            <a href="https://2gis.kz/kokshetau/search/%D0%9C.%20%D0%90%D1%83%D1%8D%D0%B7%D0%BE%D0%B2%D0%B0%20189/firm/70000001032928111?m=69.391475%2C53.28838%2F17.6"
+               target="_blank" rel="noopener noreferrer" class="map-button fade-in fade-in-delay-4">
+                <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
                 <span>Картадан көру</span>
             </a>
         </div>
@@ -1070,50 +583,23 @@
     <div class="photo-divider">
         <img src="https://images.pexels.com/photos/14005775/pexels-photo-14005775.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200" alt="" loading="lazy">
         <div class="photo-divider-overlay" style="background: linear-gradient(180deg, var(--cream) 0%, rgba(245,240,232,0) 25%, rgba(245,240,232,0) 75%, var(--ivory) 100%);"></div>
-        <div class="photo-divider-text fade-in">
-            <span>Бірге мәңгілікке...</span>
-        </div>
+        <div class="photo-divider-text fade-in"><span>Бірге мәңгілікке...</span></div>
     </div>
 
-    <!-- ==========================================
-         SECTION 4: COUNTDOWN
-         ========================================== -->
+    <!-- ==================== COUNTDOWN ==================== -->
     <section class="section countdown-section" id="countdown">
         <div class="bg-shimmer"></div>
-
         <h2 class="countdown-title fade-in">Тойға дейін қалды</h2>
         <div class="countdown-subtitle fade-in fade-in-delay-1">Кері санақ</div>
-
         <div class="inv-ornament fade-in fade-in-delay-1" style="margin-bottom: 30px;">
-            <svg width="70" height="20" viewBox="0 0 70 20" xmlns="http://www.w3.org/2000/svg">
-                <path d="M0 10 L8 3 L16 10 L8 17 Z" fill="none" stroke="#C9A96E" stroke-width="0.7"/>
-                <line x1="16" y1="10" x2="27" y2="10" stroke="#C9A96E" stroke-width="0.5"/>
-                <circle cx="35" cy="10" r="5" fill="none" stroke="#C9A96E" stroke-width="0.8"/>
-                <circle cx="35" cy="10" r="2" fill="#C9A96E" opacity="0.4"/>
-                <line x1="43" y1="10" x2="54" y2="10" stroke="#C9A96E" stroke-width="0.5"/>
-                <path d="M70 10 L62 3 L54 10 L62 17 Z" fill="none" stroke="#C9A96E" stroke-width="0.7"/>
-            </svg>
+            <svg width="70" height="20" viewBox="0 0 70 20"><path d="M0 10 L8 3 L16 10 L8 17 Z" fill="none" stroke="#C9A96E" stroke-width="0.7"/><line x1="16" y1="10" x2="27" y2="10" stroke="#C9A96E" stroke-width="0.5"/><circle cx="35" cy="10" r="5" fill="none" stroke="#C9A96E" stroke-width="0.8"/><circle cx="35" cy="10" r="2" fill="#C9A96E" opacity="0.4"/><line x1="43" y1="10" x2="54" y2="10" stroke="#C9A96E" stroke-width="0.5"/><path d="M70 10 L62 3 L54 10 L62 17 Z" fill="none" stroke="#C9A96E" stroke-width="0.7"/></svg>
         </div>
-
         <div class="countdown-grid fade-in fade-in-delay-2">
-            <div class="countdown-item">
-                <div class="countdown-number" id="days">000</div>
-                <div class="countdown-label">Күн</div>
-            </div>
-            <div class="countdown-item">
-                <div class="countdown-number" id="hours">00</div>
-                <div class="countdown-label">Сағат</div>
-            </div>
-            <div class="countdown-item">
-                <div class="countdown-number" id="minutes">00</div>
-                <div class="countdown-label">Минут</div>
-            </div>
-            <div class="countdown-item">
-                <div class="countdown-number" id="seconds">00</div>
-                <div class="countdown-label">Секунд</div>
-            </div>
+            <div class="countdown-item"><div class="countdown-number" id="days">000</div><div class="countdown-label">Күн</div></div>
+            <div class="countdown-item"><div class="countdown-number" id="hours">00</div><div class="countdown-label">Сағат</div></div>
+            <div class="countdown-item"><div class="countdown-number" id="minutes">00</div><div class="countdown-label">Минут</div></div>
+            <div class="countdown-item"><div class="countdown-number" id="seconds">00</div><div class="countdown-label">Секунд</div></div>
         </div>
-
         <div class="countdown-hearts fade-in fade-in-delay-3">
             <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
             <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
@@ -1121,13 +607,9 @@
         </div>
     </section>
 
-    <!-- ==========================================
-         SECTION 5: RSVP
-         ========================================== -->
+    <!-- ==================== RSVP ==================== -->
     <section class="section rsvp-section" id="rsvp">
         <div class="bg-shimmer"></div>
-
-        <!-- Corner ornaments -->
         <div class="orn-border-wrap">
             <div class="orn-line top"></div><div class="orn-line bottom"></div>
             <div class="orn-corner tl"><svg viewBox="0 0 100 100"><path d="M5 5 L5 30 Q5 45 15 50 L30 55 Q42 58 42 45 L42 35 Q42 22 52 20 L65 18 Q75 16 75 8 L75 5" fill="none" stroke="#C9A96E" stroke-width="1.2"/><path d="M5 5 L25 5 Q38 5 38 18 L38 28 Q38 38 48 38 L60 38" fill="none" stroke="#C9A96E" stroke-width="0.8"/><circle cx="5" cy="5" r="2" fill="#C9A96E" opacity="0.4"/></svg></div>
@@ -1135,43 +617,28 @@
             <div class="orn-corner bl"><svg viewBox="0 0 100 100"><path d="M5 5 L5 30 Q5 45 15 50 L30 55 Q42 58 42 45 L42 35 Q42 22 52 20 L65 18 Q75 16 75 8 L75 5" fill="none" stroke="#C9A96E" stroke-width="1.2"/><path d="M5 5 L25 5 Q38 5 38 18 L38 28 Q38 38 48 38 L60 38" fill="none" stroke="#C9A96E" stroke-width="0.8"/><circle cx="5" cy="5" r="2" fill="#C9A96E" opacity="0.4"/></svg></div>
             <div class="orn-corner br"><svg viewBox="0 0 100 100"><path d="M5 5 L5 30 Q5 45 15 50 L30 55 Q42 58 42 45 L42 35 Q42 22 52 20 L65 18 Q75 16 75 8 L75 5" fill="none" stroke="#C9A96E" stroke-width="1.2"/><path d="M5 5 L25 5 Q38 5 38 18 L38 28 Q38 38 48 38 L60 38" fill="none" stroke="#C9A96E" stroke-width="0.8"/><circle cx="5" cy="5" r="2" fill="#C9A96E" opacity="0.4"/></svg></div>
         </div>
-
         <div class="rsvp-container">
             <h2 class="rsvp-title fade-in">Сауалнама</h2>
             <div class="rsvp-subtitle fade-in fade-in-delay-1">Қатысуыңызды растаңыз</div>
-
-            <p class="rsvp-description fade-in fade-in-delay-2">
-                Сауалнаманы толтырып, тойға қатысуыңызды растауыңызды сұраймыз
-            </p>
-
+            <p class="rsvp-description fade-in fade-in-delay-2">Сауалнаманы толтырып, тойға қатысуыңызды растауыңызды сұраймыз</p>
             <div id="rsvpFormWrapper" class="fade-in fade-in-delay-3">
                 <form class="rsvp-form" id="rsvpForm">
                     <div class="form-group">
                         <label class="form-label" for="guestName">Аты-жөніңіз</label>
-                        <input type="text" class="form-input" id="guestName" name="name"
-                               placeholder="Аты-жөніңізді жазыңыз" required autocomplete="name">
+                        <input type="text" class="form-input" id="guestName" name="name" placeholder="Аты-жөніңізді жазыңыз" required autocomplete="name">
                     </div>
                     <div class="form-group">
                         <label class="form-label">Қатысасыз ба?</label>
                         <div class="radio-group">
-                            <div class="radio-option">
-                                <input type="radio" id="attending" name="attendance" value="Тойға келемін" required>
-                                <label class="radio-label" for="attending">✨ Тойға келемін</label>
-                            </div>
-                            <div class="radio-option">
-                                <input type="radio" id="notAttending" name="attendance" value="Келе алмаймын">
-                                <label class="radio-label" for="notAttending">Келе алмаймын</label>
-                            </div>
+                            <div class="radio-option"><input type="radio" id="attending" name="attendance" value="Тойға келемін" required><label class="radio-label" for="attending">✨ Тойға келемін</label></div>
+                            <div class="radio-option"><input type="radio" id="notAttending" name="attendance" value="Келе алмаймын"><label class="radio-label" for="notAttending">Келе алмаймын</label></div>
                         </div>
                     </div>
                     <button type="submit" class="submit-btn" id="submitBtn">Жіберу</button>
                 </form>
             </div>
-
             <div class="success-message" id="successMessage">
-                <div class="success-icon">
-                    <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-                </div>
+                <div class="success-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
                 <div class="success-title">Рахмет!</div>
                 <div class="success-text">Жауабыңыз қабылданды, сізді асыға күтеміз! 💛</div>
             </div>
@@ -1180,106 +647,185 @@
 
     <!-- FOOTER -->
     <footer class="footer">
-        <div class="footer-names fade-in">Зарина & Диасхан</div>
+        <div class="footer-names fade-in">Диасхан & Зарина</div>
         <div class="footer-date fade-in fade-in-delay-1">16 · 08 · 2026</div>
         <div class="footer-ornament fade-in fade-in-delay-2">
-            <svg viewBox="0 0 80 30" xmlns="http://www.w3.org/2000/svg">
-                <path d="M0 15 Q10 5 20 15 Q30 25 40 15 Q50 5 60 15 Q70 25 80 15" fill="none" stroke="#C9A96E" stroke-width="1"/>
-                <circle cx="40" cy="15" r="3" fill="none" stroke="#C9A96E" stroke-width="0.8"/>
-                <circle cx="40" cy="15" r="1" fill="#C9A96E"/>
-            </svg>
+            <svg viewBox="0 0 80 30"><path d="M0 15 Q10 5 20 15 Q30 25 40 15 Q50 5 60 15 Q70 25 80 15" fill="none" stroke="#C9A96E" stroke-width="1"/><circle cx="40" cy="15" r="3" fill="none" stroke="#C9A96E" stroke-width="0.8"/><circle cx="40" cy="15" r="1" fill="#C9A96E"/></svg>
         </div>
     </footer>
 
-    <!-- ==========================================
-         JAVASCRIPT
-         ========================================== -->
     <script>
-        // ============================================
-        // PRELOADER
-        // ============================================
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                document.getElementById('preloader').classList.add('hidden');
-            }, 1200);
+        // ==================== WEB AUDIO — PIANO MELODY ====================
+        let audioCtx = null;
+        let pianoPlaying = false;
+        let pianoTimeout = null;
+
+        // Beautiful wedding melody notes (frequency, duration, delay)
+        const melody = [
+            // Phrase 1 — gentle ascending
+            {f: 523.25, d: 0.8, t: 0},     // C5
+            {f: 659.25, d: 0.6, t: 0.9},   // E5
+            {f: 783.99, d: 0.8, t: 1.6},   // G5
+            {f: 880.00, d: 1.0, t: 2.5},   // A5
+            {f: 783.99, d: 0.6, t: 3.6},   // G5
+            {f: 659.25, d: 1.2, t: 4.3},   // E5
+            // Phrase 2 — warm descending
+            {f: 698.46, d: 0.8, t: 5.8},   // F5
+            {f: 587.33, d: 0.6, t: 6.7},   // D5
+            {f: 523.25, d: 0.8, t: 7.4},   // C5
+            {f: 440.00, d: 1.0, t: 8.3},   // A4
+            {f: 493.88, d: 0.7, t: 9.4},   // B4
+            {f: 523.25, d: 1.4, t: 10.2},  // C5
+            // Phrase 3 — emotional peak
+            {f: 659.25, d: 0.5, t: 11.9},  // E5
+            {f: 783.99, d: 0.5, t: 12.5},  // G5
+            {f: 1046.50, d: 1.0, t: 13.1}, // C6
+            {f: 987.77, d: 0.6, t: 14.2},  // B5
+            {f: 880.00, d: 0.8, t: 14.9},  // A5
+            {f: 783.99, d: 1.2, t: 15.8},  // G5
+            // Phrase 4 — gentle resolve
+            {f: 698.46, d: 0.5, t: 17.2},  // F5
+            {f: 659.25, d: 0.7, t: 17.8},  // E5
+            {f: 587.33, d: 0.6, t: 18.6},  // D5
+            {f: 523.25, d: 1.8, t: 19.3},  // C5
+        ];
+        const MELODY_LOOP = 22; // seconds total for one loop
+
+        function playPianoNote(freq, duration, startTime) {
+            if (!audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            const filter = audioCtx.createBiquadFilter();
+
+            // Warm piano-like tone
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime + startTime);
+
+            // Add harmonic
+            const osc2 = audioCtx.createOscillator();
+            const gain2 = audioCtx.createGain();
+            osc2.type = 'sine';
+            osc2.frequency.setValueAtTime(freq * 2, audioCtx.currentTime + startTime);
+            gain2.gain.setValueAtTime(0.08, audioCtx.currentTime + startTime);
+            osc2.connect(gain2);
+            gain2.connect(filter);
+
+            filter.type = 'lowpass';
+            filter.frequency.setValueAtTime(2000, audioCtx.currentTime + startTime);
+
+            // ADSR envelope
+            const t = audioCtx.currentTime + startTime;
+            gain.gain.setValueAtTime(0, t);
+            gain.gain.linearRampToValueAtTime(0.12, t + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.06, t + duration * 0.3);
+            gain.gain.exponentialRampToValueAtTime(0.001, t + duration);
+
+            osc.connect(gain);
+            gain.connect(filter);
+            filter.connect(audioCtx.destination);
+
+            osc.start(t);
+            osc.stop(t + duration + 0.1);
+            osc2.start(t);
+            osc2.stop(t + duration + 0.1);
+        }
+
+        function playMelodyLoop() {
+            if (!pianoPlaying || !audioCtx) return;
+            melody.forEach(n => playPianoNote(n.f, n.d, n.t));
+            pianoTimeout = setTimeout(playMelodyLoop, MELODY_LOOP * 1000);
+        }
+
+        function startPianoMusic() {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            pianoPlaying = true;
+            playMelodyLoop();
+        }
+
+        function stopPianoMusic() {
+            pianoPlaying = false;
+            if (pianoTimeout) clearTimeout(pianoTimeout);
+            if (audioCtx) audioCtx.close().then(() => { audioCtx = null; });
+        }
+
+        // ==================== WELCOME SPLASH ====================
+        const splash = document.getElementById('welcomeSplash');
+        const enterBtn = document.getElementById('enterBtn');
+        let musicStarted = false;
+
+        enterBtn.addEventListener('click', () => {
+            splash.classList.add('hidden');
+
+            // Try HTML audio first, fallback to Web Audio piano
+            const bgMusic = document.getElementById('bgMusic');
+            const src = bgMusic.querySelector('source').getAttribute('src');
+
+            if (src && src.trim() !== '') {
+                bgMusic.play().then(() => {
+                    musicStarted = true;
+                    document.getElementById('musicBars').classList.add('playing');
+                }).catch(() => {
+                    startPianoMusic();
+                    musicStarted = true;
+                    document.getElementById('musicBars').classList.add('playing');
+                });
+            } else {
+                startPianoMusic();
+                musicStarted = true;
+                document.getElementById('musicBars').classList.add('playing');
+            }
         });
 
-        // ============================================
-        // INTERSECTION OBSERVER
-        // ============================================
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-
-        document.querySelectorAll('.fade-in, .fade-scale, .fade-left, .fade-right').forEach(el => {
-            observer.observe(el);
-        });
-
-        // ============================================
-        // MUSIC PLAYER
-        // ============================================
-        const bgMusic = document.getElementById('bgMusic');
+        // ==================== MUSIC TOGGLE ====================
         const musicToggle = document.getElementById('musicToggle');
         const musicBars = document.getElementById('musicBars');
-        let isMusicPlaying = false;
+        let isMusicPlaying = true;
 
         musicToggle.addEventListener('click', () => {
+            const bgMusic = document.getElementById('bgMusic');
+            const src = bgMusic.querySelector('source').getAttribute('src');
+            const useHtml = src && src.trim() !== '';
+
             if (isMusicPlaying) {
-                bgMusic.pause();
+                if (useHtml) bgMusic.pause();
+                else stopPianoMusic();
                 musicBars.classList.remove('playing');
                 isMusicPlaying = false;
             } else {
-                bgMusic.play().then(() => {
-                    musicBars.classList.add('playing');
-                    isMusicPlaying = true;
-                }).catch(err => console.log('Аудио:', err));
+                if (useHtml) {
+                    bgMusic.play().catch(() => {});
+                } else {
+                    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                    if (audioCtx.state === 'suspended') audioCtx.resume();
+                    pianoPlaying = true;
+                    playMelodyLoop();
+                }
+                musicBars.classList.add('playing');
+                isMusicPlaying = true;
             }
         });
 
-        // ============================================
-        // COUNTDOWN TIMER — 16 August 2026, 14:00
-        // ============================================
+        // ==================== OBSERVER ====================
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+        document.querySelectorAll('.fade-in, .fade-scale').forEach(el => observer.observe(el));
+
+        // ==================== COUNTDOWN ====================
         const weddingDate = new Date('2026-08-16T14:00:00+06:00');
-
         function updateCountdown() {
-            const now = new Date();
-            const diff = weddingDate - now;
-
-            if (diff <= 0) {
-                ['days','hours','minutes','seconds'].forEach(id =>
-                    document.getElementById(id).textContent = '0');
-                return;
-            }
-
-            const d = Math.floor(diff / (1000*60*60*24));
-            const h = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
-            const m = Math.floor((diff % (1000*60*60)) / (1000*60));
-            const s = Math.floor((diff % (1000*60)) / 1000);
-
-            document.getElementById('days').textContent = d;
-            document.getElementById('hours').textContent = String(h).padStart(2,'0');
-            document.getElementById('minutes').textContent = String(m).padStart(2,'0');
-            document.getElementById('seconds').textContent = String(s).padStart(2,'0');
+            const diff = weddingDate - new Date();
+            if (diff <= 0) { ['days','hours','minutes','seconds'].forEach(id => document.getElementById(id).textContent = '0'); return; }
+            document.getElementById('days').textContent = Math.floor(diff/(1000*60*60*24));
+            document.getElementById('hours').textContent = String(Math.floor((diff%(1000*60*60*24))/(1000*60*60))).padStart(2,'0');
+            document.getElementById('minutes').textContent = String(Math.floor((diff%(1000*60*60))/(1000*60))).padStart(2,'0');
+            document.getElementById('seconds').textContent = String(Math.floor((diff%(1000*60))/1000)).padStart(2,'0');
         }
-        updateCountdown();
-        setInterval(updateCountdown, 1000);
+        updateCountdown(); setInterval(updateCountdown, 1000);
 
-        // ============================================
-        // RSVP FORM
-        // ============================================
-        /*
-            ====================================================================
-            GOOGLE APPS SCRIPT WEB APP СІЛТЕМЕСІ:
-            Төмендегі URL-ге өзіңіздің Web App сілтемеңізді қойыңыз.
-            Мысалы: 'https://script.google.com/macros/s/AKfycb.../exec'
-            ====================================================================
-        */
-        const GOOGLE_SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE';
-
+        // ==================== RSVP ====================
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwP2gHikyU1Cdt34bN6elgTRTYtSJa_uAA80AXZ911A-RbtYl_Tg7xGpv3hZtxU6erz/exec';
         const rsvpForm = document.getElementById('rsvpForm');
         const rsvpFormWrapper = document.getElementById('rsvpFormWrapper');
         const successMessage = document.getElementById('successMessage');
@@ -1287,97 +833,51 @@
 
         rsvpForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-
             const name = document.getElementById('guestName').value.trim();
             const attendance = document.querySelector('input[name="attendance"]:checked');
             if (!name || !attendance) return;
-
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Жіберілуде...';
-
-            const formData = {
-                name: name,
-                attendance: attendance.value,
-                timestamp: new Date().toLocaleString('kk-KZ')
-            };
-
-            try {
-                await fetch(GOOGLE_SCRIPT_URL, {
-                    method: 'POST', mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(formData)
-                });
-            } catch (err) {
-                console.error('Қате:', err);
-            }
-
+            submitBtn.disabled = true; submitBtn.textContent = 'Жіберілуде...';
+            try { await fetch(GOOGLE_SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name, attendance: attendance.value, timestamp: new Date().toLocaleString('kk-KZ') }) }); } catch(e) {}
             rsvpFormWrapper.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-            rsvpFormWrapper.style.opacity = '0';
-            rsvpFormWrapper.style.transform = 'translateY(-20px) scale(0.95)';
-            setTimeout(() => {
-                rsvpFormWrapper.style.display = 'none';
-                successMessage.classList.add('show');
-            }, 600);
+            rsvpFormWrapper.style.opacity = '0'; rsvpFormWrapper.style.transform = 'translateY(-20px) scale(0.95)';
+            setTimeout(() => { rsvpFormWrapper.style.display = 'none'; successMessage.classList.add('show'); }, 600);
         });
 
-        // ============================================
-        // PARTICLES & PETALS
-        // ============================================
+        // ==================== PARTICLES ====================
         function createParticles() {
-            const container = document.getElementById('particles');
-            const isMobile = window.innerWidth < 768;
-            const count = isMobile ? 15 : 28;
-
-            for (let i = 0; i < count; i++) {
+            const c = document.getElementById('particles');
+            const m = window.innerWidth < 768;
+            for (let i = 0; i < (m ? 15 : 28); i++) {
                 const p = document.createElement('div');
                 p.classList.add('particle', Math.random() > 0.4 ? 'gold' : 'sparkle');
-                p.style.left = Math.random() * 100 + '%';
-                p.style.animationDelay = Math.random() * 10 + 's';
-                p.style.animationDuration = (8 + Math.random() * 8) + 's';
-                const size = 3 + Math.random() * 5;
-                p.style.width = size + 'px';
-                p.style.height = size + 'px';
-                container.appendChild(p);
+                p.style.left = Math.random()*100+'%';
+                p.style.animationDelay = Math.random()*10+'s';
+                p.style.animationDuration = (8+Math.random()*8)+'s';
+                const s = 3+Math.random()*5; p.style.width = s+'px'; p.style.height = s+'px';
+                c.appendChild(p);
             }
-
-            // Rose petals
-            const petalCount = isMobile ? 6 : 12;
-            for (let i = 0; i < petalCount; i++) {
-                const petal = document.createElement('div');
-                petal.classList.add('petal');
-                petal.innerHTML = `<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                    <ellipse cx="10" cy="10" rx="5" ry="9" fill="#C9A96E" opacity="0.25" transform="rotate(${Math.random()*60-30}, 10, 10)"/>
-                </svg>`;
-                petal.style.left = Math.random() * 100 + '%';
-                petal.style.animationDelay = Math.random() * 12 + 's';
-                petal.style.animationDuration = (10 + Math.random() * 8) + 's';
-                const pSize = 10 + Math.random() * 14;
-                petal.style.width = pSize + 'px';
-                petal.style.height = pSize + 'px';
-                container.appendChild(petal);
+            for (let i = 0; i < (m ? 6 : 12); i++) {
+                const pt = document.createElement('div'); pt.classList.add('petal');
+                pt.innerHTML = '<svg viewBox="0 0 20 20"><ellipse cx="10" cy="10" rx="5" ry="9" fill="#C9A96E" opacity="0.25" transform="rotate('+(Math.random()*60-30)+',10,10)"/></svg>';
+                pt.style.left = Math.random()*100+'%';
+                pt.style.animationDelay = Math.random()*12+'s';
+                pt.style.animationDuration = (10+Math.random()*8)+'s';
+                const s2 = 10+Math.random()*14; pt.style.width = s2+'px'; pt.style.height = s2+'px';
+                c.appendChild(pt);
             }
         }
         createParticles();
 
-        // ============================================
-        // PARALLAX EFFECT (subtle)
-        // ============================================
+        // ==================== PARALLAX ====================
         let ticking = false;
         window.addEventListener('scroll', () => {
-            if (!ticking) {
-                requestAnimationFrame(() => {
-                    const scrolled = window.pageYOffset;
-                    // Subtle parallax on hero photo elements
-                    const heroLeft = document.querySelector('.hero-photo-left');
-                    const heroRight = document.querySelector('.hero-photo-right');
-                    if (heroLeft && heroRight) {
-                        heroLeft.style.transform = `translateY(calc(-50% + ${scrolled * 0.15}px)) rotate(-8deg)`;
-                        heroRight.style.transform = `translateY(calc(-50% + ${scrolled * 0.1}px)) rotate(8deg)`;
-                    }
-                    ticking = false;
-                });
-                ticking = true;
-            }
+            if (!ticking) { requestAnimationFrame(() => {
+                const s = window.pageYOffset;
+                const l = document.querySelector('.hero-photo-left');
+                const r = document.querySelector('.hero-photo-right');
+                if (l && r) { l.style.transform = `translateY(calc(-50% + ${s*0.15}px)) rotate(-8deg)`; r.style.transform = `translateY(calc(-50% + ${s*0.1}px)) rotate(8deg)`; }
+                ticking = false;
+            }); ticking = true; }
         });
     </script>
 </body>
